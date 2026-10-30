@@ -1,73 +1,37 @@
-# React + TypeScript + Vite
+# Undangan Pernikahan Interaktif
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Undangan berbentuk game 2D: tamu memilih karakter dan outfit, lalu berjalan melewati gerbang pernikahan, jam acara, meja resepsionis, panggung band, dan pelaminan.
 
-Currently, two official plugins are available:
+## Mengatur isi undangan
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Semua data ada di `src/config.ts`: nama mempelai, orang tua, jadwal acara, lokasi, nomor WhatsApp RSVP, rekening amplop digital, dan daftar lagu.
 
-## React Compiler
+Musik: taruh file di `public/music/backsound.mp3` (atau ubah `src` di `songs`). Kalau file tidak ditemukan, band memainkan Canon in D versi chiptune.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Membagikan undangan
 
-## Expanding the ESLint configuration
+Nama tamu diambil dari URL:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+https://domain-kamu.com/adnan                          -> Adnan
+https://domain-kamu.com/budi-santoso?ajak=pasangan     -> Budi Santoso & Pasangan
+https://domain-kamu.com/siti-aminah?ajak=keluarga      -> Siti Aminah & Keluarga
+https://domain-kamu.com/adnan?versi=biasa              -> langsung versi biasa (tanpa game)
+https://domain-kamu.com/adnan?versi=game               -> langsung mode game
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Tanpa `versi`, tamu memilih sendiri di sampul: Mode Game atau Versi Biasa. Di mode game, tamu memilih sapaan (Bapak/Mas/Kak, Ibu/Mbak/Kak, atau tanpa sapaan) dan bisa mengubah datang sendiri/pasangan/keluarga.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Untuk membuat banyak link sekaligus, buka `https://domain-kamu.com/?generate`. Tulis satu nama per baris, tambahkan `, pasangan` atau `, keluarga` bila perlu, lalu salin pesan atau kirim langsung via WhatsApp.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Hosting harus mengarahkan semua path ke `index.html`. Konfigurasi untuk Vercel (`vercel.json`) dan Netlify (`public/_redirects`) sudah disertakan.
+
+## Development
+
 ```
+npm install
+npm run dev
+npm run build
+```
+
+Hasil `dist/` bisa di-deploy ke hosting statis seperti Vercel, Netlify, atau GitHub Pages.
